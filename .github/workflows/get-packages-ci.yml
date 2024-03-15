@@ -1,0 +1,84 @@
+name: 'Get Packages'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "* 5 * * *"
+  
+jobs:
+  build_package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install_build-dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: build-essential cmake fakeroot git libarchive-dev libarchive-tools libcurl4-openssl-dev libgpgme-dev libssl-dev libarchive-dev zip zstd
+      - name: install_python-dependencies
+        run: |
+          sudo python3 -m pip install meson ninja
+      - name: install_pacman
+        run: |
+          sudo git clone -q --depth 1 https://gitlab.manjaro.org/packages/core/pacman.git
+          pushd pacman
+          sudo git clone -q --depth 1 https://gitlab.archlinux.org/pacman/pacman.git
+          pushd pacman
+          sudo patch -p1 -i ../pacman-sync-first-option.patch
+          sudo meson --prefix=/usr \
+                      --buildtype=plain \
+                      -Ddoc=disabled \
+                      -Ddoxygen=enabled \
+                      -Dscriptlet-shell=/usr/bin/bash \
+                      -Dldconfig=/usr/bin/ldconfig \
+                      build
+          sudo meson compile -C build
+          sudo meson install -C build
+          popd
+          sudo install -m644 pacman.conf /etc/pacman.conf
+          sudo install -m644 makepkg.conf /etc/
+          sudo mkdir -p /etc/pacman.d
+          sudo touch /etc/pacman.d/mirrorlist
+          popd
+      - name: install_keyrings
+        run: |
+          sudo install -dm755 /usr/share/pacman/keyrings/
+          sudo git clone -q --depth 1 https://gitlab.manjaro.org/packages/core/manjaro-keyring.git
+          pushd manjaro-keyring
+          sudo install -m0644 manjaro.gpg /usr/share/pacman/keyrings/
+          sudo install -m0644 manjaro-trusted /usr/share/pacman/keyrings/
+          sudo install -m0644 manjaro-trusted /usr/share/pacman/keyrings/
+          popd
+          
+          mkdir -p archlinux-keyring
+          pushd archlinux-keyring
+          curl --compressed -sL https://archlinux.org/packages/core/any/archlinux-keyring/download -o /tmp/archlinux-keyring.tar.zst
+          tar --use-compress-program=unzstd --strip-components=4 --wildcards -xvf /tmp/archlinux-keyring.tar.zst usr/share/pacman/keyrings/*
+          sudo install -m0644 archlinux.gpg /usr/share/pacman/keyrings/
+          sudo install -m0644 archlinux-trusted /usr/share/pacman/keyrings/
+          sudo install -m0644 archlinux-revoked /usr/share/pacman/keyrings/
+          popd
+          sudo pacman-key --init
+          sudo pacman-key --populate archlinux manjaro
+
+      - name: Download Packages and add them to Repo
+        run: |
+          git clone https://github.com/pheiduck/phandrix-arch-repo.git
+          cd phandrix-arch-repo/x86_64
+          vim_pkgver=$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)
+          curl_pkgver=$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)
+          pkgrel=$(date '+%Y%m%d')
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$vim_pkgver-1/gvim-$vim_pkgver-1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$vim_pkgver-1/vim-$vim_pkgver-1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$vim_pkgver-1/vim-runtime-$vim_pkgver-1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$curl_pkgver-$pkgrel/curl-$pkgver-$pkgrel-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$curl_pkgver-$pkgrel/libcurl-gnutls-$curl_pkgver-$pkgrel-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$curl_pkgver-$pkgrel/libcurl-compat-$curl_pkgver-$pkgrel-any.pkg.tar.zst
+          repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
+          rm -v phandrix-arch-repo.db phandrix-arch-repo.files
+          mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.files.tar.gz phandrix-arch-repo.db  phandrix-arch-repo.files
+          git config --global user.name 'Arch Linux Package Bot'
+          git config --global user.email 'archlinux-package-bot@users.noreply.github.com'
+          git add .
+          git commit -am "apb: package updates" || true
+          git push
+          
+      
