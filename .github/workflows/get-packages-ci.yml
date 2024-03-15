@@ -59,9 +59,15 @@ jobs:
           sudo pacman-key --init
           sudo pacman-key --populate archlinux manjaro
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: pheiduck/phandrix-arch-repo
+          ref: main
+
       - name: Download Packages and add them to Repo
         run: |
-          cd ~/work/phandrix-arch-repo/x86_64
+          cd x86_64
           pkgrel=$(date '+%Y%m%d')
           curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/gvim--1-any.pkg.tar.zst
           curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
