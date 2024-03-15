@@ -3,7 +3,7 @@ name: 'Get Packages'
 on:
   workflow_dispatch:
   schedule:
-    - cron: "* 5 * * *"
+    - cron: "* 6 * * *"
   
 jobs:
   get_packages:
@@ -68,7 +68,7 @@ jobs:
         run: |
           cd x86_64
           pkgrel=$(date '+%Y%m%d')
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/gvim--1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/gvim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
           curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
           curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-runtime-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
           curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/curl-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
