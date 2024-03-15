@@ -6,7 +6,7 @@ on:
     - cron: "* 5 * * *"
   
 jobs:
-  build_package:
+  get_packages:
     runs-on: ubuntu-latest
     steps:
       - name: install_build-dependencies
