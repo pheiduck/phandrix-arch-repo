@@ -63,8 +63,6 @@ jobs:
         run: |
           git clone https://github.com/pheiduck/phandrix-arch-repo.git
           cd phandrix-arch-repo/x86_64
-          vim_pkgver=
-          curl_pkgver=
           pkgrel=$(date '+%Y%m%d')
           curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/gvim--1-any.pkg.tar.zst
           curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
