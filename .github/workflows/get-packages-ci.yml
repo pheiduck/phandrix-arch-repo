@@ -74,8 +74,8 @@ jobs:
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.db
           mv -v phandrix-arch-repo.files.tar.gz phandrix-arch-repo.files
-          git config --global user.name 'Arch Linux Package Bot'
-          git config --global user.email 'archlinux-package-bot@users.noreply.github.com'
+          git config --global user.name "Arch Linux Package Bot"
+          git config --global user.email "archlinux-package-bot@users.noreply.github.com"
           git add .
           git commit -am "apb: package updates" || true
           git push
