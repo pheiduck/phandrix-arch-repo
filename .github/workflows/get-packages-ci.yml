@@ -74,7 +74,8 @@ jobs:
           curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/libcurl-compat-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
           repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst || true
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
-          mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.files.tar.gz phandrix-arch-repo.db  phandrix-arch-repo.files
+          mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.db
+          mv -v phandrix-arch-repo.files.tar.gz phandrix-arch-repo.files
           git config --global user.name 'Arch Linux Package Bot'
           git config --global user.email 'archlinux-package-bot@users.noreply.github.com'
           git add .
