@@ -61,6 +61,7 @@ jobs:
 
       - name: Download Packages and add them to Repo
         run: |
+          ls
           cd ..
           cd x86_64
           pkgrel=$(date '+%Y%m%d')
