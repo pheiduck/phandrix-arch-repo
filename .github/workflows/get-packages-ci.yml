@@ -63,15 +63,15 @@ jobs:
         run: |
           git clone https://github.com/pheiduck/phandrix-arch-repo.git
           cd phandrix-arch-repo/x86_64
-          vim_pkgver=$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)
-          curl_pkgver=$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)
+          vim_pkgver=
+          curl_pkgver=
           pkgrel=$(date '+%Y%m%d')
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$vim_pkgver-1/gvim-$vim_pkgver-1-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$vim_pkgver-1/vim-$vim_pkgver-1-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$vim_pkgver-1/vim-runtime-$vim_pkgver-1-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$curl_pkgver-$pkgrel/curl-$pkgver-$pkgrel-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$curl_pkgver-$pkgrel/libcurl-gnutls-$curl_pkgver-$pkgrel-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$curl_pkgver-$pkgrel/libcurl-compat-$curl_pkgver-$pkgrel-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/gvim--1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-runtime-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/curl-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/libcurl-gnutls-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
+          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/libcurl-compat-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
           repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.files.tar.gz phandrix-arch-repo.db  phandrix-arch-repo.files
