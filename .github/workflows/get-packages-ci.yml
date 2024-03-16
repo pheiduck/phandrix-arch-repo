@@ -67,12 +67,12 @@ jobs:
       - name: Download Packages and add them to Repo
         run: |
           cd x86_64
-          rm -v *.pkg.tar.zst
+          rm -v *.zst
           pkgrel=$(date '+%Y%m%d')
-          gh release download $(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel --repo https://github.com/pheiduck/curl-daily
-          gh release download $(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1 --repo https://github.com/pheiduck/vim-git
-          gh release download $(curl -s https://raw.githubusercontent.com/pheiduck/linux-latest/master/PKGBUILD | sed -n "7p" | cut -c8-10)-1 --repo https://github.com/pheiduck/linux-latest
-          gh release download $(curl -s https://raw.githubusercontent.com/pheiduck/linux-lts/master/PKGBUILD | sed -n "7p" | cut -c8-10)-1 --repo https://github.com/pheiduck/linux-lts
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/curl-daily
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/vim-git
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-latest
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-lts
           repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.db
