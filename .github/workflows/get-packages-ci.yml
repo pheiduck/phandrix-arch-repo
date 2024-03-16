@@ -1,7 +1,6 @@
 name: 'Get Packages'
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: "* 6 * * *"
   
@@ -74,7 +73,7 @@ jobs:
           gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-lts
           repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
-          mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.db
+          mv -v phandrix-arch-repo.db.tar.gz phandrix-arch-repo.db
           mv -v phandrix-arch-repo.files.tar.gz phandrix-arch-repo.files
           git config --global user.name "Arch Linux Package Bot"
           git config --global user.email "archlinux-package-bot@users.noreply.github.com"
