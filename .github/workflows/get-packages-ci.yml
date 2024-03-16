@@ -68,7 +68,6 @@ jobs:
         run: |
           cd x86_64
           rm -v *.zst
-          pkgrel=$(date '+%Y%m%d')
           gh release download --pattern '*.zst' --repo https://github.com/pheiduck/curl-daily
           gh release download --pattern '*.zst' --repo https://github.com/pheiduck/vim-git
           gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-latest
