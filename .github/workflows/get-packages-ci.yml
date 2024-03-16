@@ -1,6 +1,7 @@
 name: 'Get Packages'
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "* 6 * * *"
   
@@ -68,12 +69,10 @@ jobs:
           cd x86_64
           rm -v *.pkg.tar.zst
           pkgrel=$(date '+%Y%m%d')
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/gvim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/vim-git/releases/download/$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1/vim-runtime-$(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/curl-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/libcurl-gnutls-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
-          curl -LO https://github.com/pheiduck/curl-daily/releases/download/$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel/libcurl-compat-$(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel-any.pkg.tar.zst
+          gh release download $(curl -s https://raw.githubusercontent.com/curl/curl/master/RELEASE-NOTES | sed -n "1p" | cut -c18-22)-$pkgrel --repo https://github.com/pheiduck/curl-daily
+          gh release download $(curl -s https://api.github.com/repos/vim/vim/tags | sed -n "3p" | cut -c15-22)-1 --repo https://github.com/pheiduck/vim-git
+          gh release download $(curl -s https://raw.githubusercontent.com/pheiduck/linux-latest/master/PKGBUILD | sed -n "7p" | cut -c8-10)-1 --repo https://github.com/pheiduck/linux-latest
+          gh release download $(curl -s https://raw.githubusercontent.com/pheiduck/linux-lts/master/PKGBUILD | sed -n "7p" | cut -c8-10)-1 --repo https://github.com/pheiduck/linux-lts
           repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.gz  phandrix-arch-repo.db
