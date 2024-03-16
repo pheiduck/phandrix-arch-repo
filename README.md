@@ -4,5 +4,4 @@
 
 [phandrix-arch-repo] <br>
 SigLevel = Optional TrustAll <br>
-Server = https://github.com/pheiduck/$repo/-/raw/main/$arch
-
+Server = https://github.com/pheiduck/$repo/raw/main/$arch
