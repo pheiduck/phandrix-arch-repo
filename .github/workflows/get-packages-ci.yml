@@ -1,6 +1,7 @@
 name: 'Get Packages'
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "* 6 * * *"
   
@@ -68,12 +69,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd x86_64
-          rm -v *.zst
-          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/curl-daily
-          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/vim-git
-          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-latest
-          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-lts
-          repo-add phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/curl-daily || echo "no new version"
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/vim-git || echo "no new version"
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-latest || echo "no new version"
+          gh release download --pattern '*.zst' --repo https://github.com/pheiduck/linux-lts || echo "no new version"
+          repo-add --new --remove --prevent-downgrade phandrix-arch-repo.db.tar.gz *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.gz phandrix-arch-repo.db
           mv -v phandrix-arch-repo.files.tar.gz phandrix-arch-repo.files
