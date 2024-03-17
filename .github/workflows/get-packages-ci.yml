@@ -64,6 +64,8 @@ jobs:
           sudo pacman-key --populate archlinux manjaro
 
       - name: Download Packages and add them to Repo
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd x86_64
           rm -v *.zst
@@ -80,6 +82,4 @@ jobs:
           git add .
           git commit -am "apb: package updates" || true
           git push
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
