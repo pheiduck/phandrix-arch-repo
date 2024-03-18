@@ -67,7 +67,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd x86_64
+          pushd x86_64
           gh release download --skip-existing --pattern '*.zst' --repo https://github.com/pheiduck/curl-daily
           gh release download --skip-existing --pattern '*.zst' --repo https://github.com/pheiduck/vim-git
           gh release download --skip-existing --pattern '*.zst' --repo https://github.com/pheiduck/linux-latest
@@ -81,4 +81,4 @@ jobs:
           git add .
           git commit -am "apb: package updates" || true
           git push
-      
+          popd
