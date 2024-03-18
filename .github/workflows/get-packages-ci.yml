@@ -74,8 +74,8 @@ jobs:
           gh release download --skip-existing --pattern '*.zst' --repo https://github.com/pheiduck/linux-lts
           repo-add --new --remove --prevent-downgrade phandrix-arch-repo.db.tar.zst *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
-          mv -v phandrix-arch-repo.db.tar.gz phandrix-arch-repo.db
-          mv -v phandrix-arch-repo.files.tar.gz phandrix-arch-repo.files
+          mv -v phandrix-arch-repo.db.tar.zst phandrix-arch-repo.db
+          mv -v phandrix-arch-repo.files.tar.zst phandrix-arch-repo.files
           git config --global user.name "Arch Linux Package Bot"
           git config --global user.email "archlinux-package-bot@users.noreply.github.com"
           git add .
