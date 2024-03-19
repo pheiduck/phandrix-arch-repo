@@ -1,2 +1,2 @@
-phandrix-arch-repo.db.tar.zst
-phandrix-arch-repo.files.tar.zst
+*.db.tar.zst
+*.files.tar.zst
