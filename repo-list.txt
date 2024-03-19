@@ -1,0 +1,4 @@
+https://github.com/pheiduck/curl-daily
+https://github.com/pheiduck/vim-git
+https://github.com/pheiduck/linux-latest
+https://github.com/pheiduck/linux-lts

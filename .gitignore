@@ -1,2 +1,3 @@
 *.db.tar.zst
 *.files.tar.zst
+*.sh
