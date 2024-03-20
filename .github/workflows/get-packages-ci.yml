@@ -81,6 +81,7 @@ jobs:
                gh release download --skip-existing --pattern '*.zst' --repo '%s\n' "$i"
             done < ../repo-list.txt
           EOF
+          bash gh_release_dl.sh
           repo-add --new --remove --prevent-downgrade phandrix-arch-repo.db.tar.zst *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.zst phandrix-arch-repo.db
