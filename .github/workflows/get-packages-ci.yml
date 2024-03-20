@@ -74,14 +74,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pushd x86_64
-          cat > gh_release_dl.sh <<EOF
-            #!/bin/bash
-            while IFS="" read -r i || [ -n "$i" ]
-            do
-               gh release download --skip-existing --pattern '*.zst' --repo '%s\n' "$i"
-            done < ../repo-list.txt
-          EOF
-          bash gh_release_dl.sh
+          bash ../ci/gh_release_dl.sh
           repo-add --new --remove --prevent-downgrade phandrix-arch-repo.db.tar.zst *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.zst phandrix-arch-repo.db
