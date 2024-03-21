@@ -1,6 +1,7 @@
 name: 'Get Packages'
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "* 6 * * *"
   
@@ -56,7 +57,6 @@ jobs:
           sudo install -m0644 manjaro-trusted /usr/share/pacman/keyrings/
           sudo install -m0644 manjaro-trusted /usr/share/pacman/keyrings/
           popd
-          
           mkdir -p archlinux-keyring
           pushd archlinux-keyring
           curl --compressed -sL https://archlinux.org/packages/core/any/archlinux-keyring/download -o /tmp/archlinux-keyring.tar.zst
@@ -68,13 +68,23 @@ jobs:
           sudo pacman-key --init
           sudo pacman-key --populate archlinux manjaro
 
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@master
+        with:
+          gpg_private_key: ${{ secrets.GPG_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+
       - name: Download Packages and add them to Repo
         env:
+          KEYSERVER: keyserver.ubuntu.com
+          KEYID: ${{ secrets.KEYID }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          sudo pacman-key --keyserver "$KEYSERVER" -r "$KEYID"
+          sudo pacman-key --lsign-key "$KEYID"
           pushd x86_64
           bash ../ci/gh_release_dl.sh
-          repo-add --new --remove --prevent-downgrade phandrix-arch-repo.db.tar.zst *.pkg.tar.zst
+          repo-add --sign --key "$KEYID" --new --remove --prevent-downgrade phandrix-arch-repo.db.tar.zst *.pkg.tar.zst
           rm -v phandrix-arch-repo.db phandrix-arch-repo.files
           mv -v phandrix-arch-repo.db.tar.zst phandrix-arch-repo.db
           mv -v phandrix-arch-repo.files.tar.zst phandrix-arch-repo.files
