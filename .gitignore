@@ -1,2 +1,4 @@
 *.db.tar.zst
 *.files.tar.zst
+*.db.tar.zst.sig
+*.files.tar.zst.sig
