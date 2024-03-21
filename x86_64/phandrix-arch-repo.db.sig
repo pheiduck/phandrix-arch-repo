@@ -1,0 +1,1 @@
+phandrix-arch-repo.db.tar.zst.sig
